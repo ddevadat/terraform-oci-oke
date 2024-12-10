@@ -146,6 +146,7 @@ resource "oci_core_instance_configuration" "workers" {
           compartment_id      = each.value.compartment_id
           display_name        = each.key
           kms_key_id          = each.value.volume_kms_key_id
+          size_in_gbs         = max(50, lookup(each.value, "block_volume_size_in_gbs", 50))
         }
       }
     }
