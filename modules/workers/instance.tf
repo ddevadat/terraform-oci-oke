@@ -16,7 +16,7 @@ resource "oci_core_instance" "workers" {
     for_each = length(regexall("Flex", each.value.shape)) > 0 ? [1] : []
     content {
       baseline_ocpu_utilization = lookup(each.value, "burst", "BASELINE_1_1")
-      ocpus = each.value.ocpus
+      ocpus                     = each.value.ocpus
       memory_in_gbs = ( # If > 64GB memory/core, correct input to exactly 64GB memory/core
         (each.value.memory / each.value.ocpus) > 64 ? each.value.ocpus * 64 : each.value.memory
       )

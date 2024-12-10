@@ -77,7 +77,7 @@ resource "oci_core_instance_configuration" "workers" {
         for_each = length(regexall("Flex", each.value.shape)) > 0 ? [1] : []
         content {
           baseline_ocpu_utilization = lookup(each.value, "burst", "BASELINE_1_1")
-          ocpus = each.value.ocpus
+          ocpus                     = each.value.ocpus
           memory_in_gbs = ( # If > 64GB memory/core, correct input to exactly 64GB memory/core
             (each.value.memory / each.value.ocpus) > 64 ? each.value.ocpus * 64 : each.value.memory
           )
@@ -131,6 +131,24 @@ resource "oci_core_instance_configuration" "workers" {
     #     kms_key_id          = each.value.volume_kms_key_id
     #   }
     # }
+
+    dynamic "block_volumes" {
+      for_each = (lookup(each.value, "disable_block_volume", false) != true) ? [1] : []
+      content {
+        attach_details {
+          type                                = each.value.block_volume_type
+          is_pv_encryption_in_transit_enabled = each.value.pv_transit_encryption
+        }
+
+        create_details {
+          // Limit to first candidate placement AD for cluster-network; undefined for all otherwise
+          availability_domain = each.value.mode == "cluster-network" ? element(each.value.availability_domains, 1) : null
+          compartment_id      = each.value.compartment_id
+          display_name        = each.key
+          kms_key_id          = each.value.volume_kms_key_id
+        }
+      }
+    }
 
     dynamic "secondary_vnics" {
       for_each = lookup(each.value, "secondary_vnics", {})
