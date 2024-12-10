@@ -117,20 +117,20 @@ resource "oci_core_instance_configuration" "workers" {
       is_pv_encryption_in_transit_enabled = each.value.pv_transit_encryption
     }
 
-    block_volumes {
-      attach_details {
-        type                                = each.value.block_volume_type
-        is_pv_encryption_in_transit_enabled = each.value.pv_transit_encryption
-      }
+    # block_volumes {
+    #   attach_details {
+    #     type                                = each.value.block_volume_type
+    #     is_pv_encryption_in_transit_enabled = each.value.pv_transit_encryption
+    #   }
 
-      # create_details {
-      #   // Limit to first candidate placement AD for cluster-network; undefined for all otherwise
-      #   availability_domain = each.value.mode == "cluster-network" ? element(each.value.availability_domains, 1) : null
-      #   compartment_id      = each.value.compartment_id
-      #   display_name        = each.key
-      #   kms_key_id          = each.value.volume_kms_key_id
-      # }
-    }
+    #   create_details {
+    #     // Limit to first candidate placement AD for cluster-network; undefined for all otherwise
+    #     availability_domain = each.value.mode == "cluster-network" ? element(each.value.availability_domains, 1) : null
+    #     compartment_id      = each.value.compartment_id
+    #     display_name        = each.key
+    #     kms_key_id          = each.value.volume_kms_key_id
+    #   }
+    # }
 
     dynamic "secondary_vnics" {
       for_each = lookup(each.value, "secondary_vnics", {})
