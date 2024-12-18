@@ -35,7 +35,7 @@ resource "oci_containerengine_addon" "primary_addon" {
       value = tostring(lookup(config.value, "value"))
     }
   }
-
+  override_existing = lookup(each.value, "override_existing", false)
   version = lookup(each.value, "version", null)
 
   lifecycle {
@@ -68,6 +68,7 @@ resource "oci_containerengine_addon" "secondary_addon" {
     }
   }
 
+  override_existing = lookup(each.value, "override_existing", false)
   version = lookup(each.value, "version", null)
 
   lifecycle {
