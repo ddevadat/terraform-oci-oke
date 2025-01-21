@@ -48,9 +48,9 @@ resource "oci_identity_dynamic_group" "workers" {
   description    = format("Dynamic group of self-managed worker nodes for OKE Terraform state %v", var.state_id)
   matching_rule  = local.worker_group_rules
   name           = local.worker_group_name
-  defined_tags   = local.defined_tags
-  freeform_tags  = local.freeform_tags
-  lifecycle {
-    ignore_changes = [defined_tags, freeform_tags]
-  }
+  # defined_tags   = local.defined_tags
+  # freeform_tags  = local.freeform_tags
+  # lifecycle {
+  #   ignore_changes = [defined_tags, freeform_tags]
+  # }
 }
