@@ -38,9 +38,9 @@ resource "oci_identity_dynamic_group" "operator" {
   description    = format("Dynamic group of operator instance(s) for OKE Terraform state %v", var.state_id)
   matching_rule  = local.operator_group_rules
   name           = local.operator_group_name
-  defined_tags   = local.defined_tags
-  freeform_tags  = local.freeform_tags
-  lifecycle {
-    ignore_changes = [defined_tags, freeform_tags]
-  }
+  # defined_tags   = local.defined_tags
+  # freeform_tags  = local.freeform_tags
+  # lifecycle {
+  #   ignore_changes = [defined_tags, freeform_tags]
+  # }
 }
