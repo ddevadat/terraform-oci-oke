@@ -32,15 +32,15 @@ locals {
 }
 
 resource "oci_identity_dynamic_group" "operator" {
-  provider       = oci.home
+  # provider       = oci.home
   count          = var.create_iam_resources && var.create_iam_operator_policy ? 1 : 0
   compartment_id = var.tenancy_id # dynamic groups exist in root compartment (tenancy)
   description    = format("Dynamic group of operator instance(s) for OKE Terraform state %v", var.state_id)
   matching_rule  = local.operator_group_rules
   name           = local.operator_group_name
-  # defined_tags   = local.defined_tags
-  # freeform_tags  = local.freeform_tags
-  # lifecycle {
-  #   ignore_changes = [defined_tags, freeform_tags]
-  # }
+  defined_tags   = local.defined_tags
+  freeform_tags  = local.freeform_tags
+  lifecycle {
+    ignore_changes = [defined_tags, freeform_tags]
+  }
 }
