@@ -80,9 +80,9 @@ module "iam_cluster_prerequisites" {
   autoscaler_compartments = []
   worker_compartments     = []
 
-  providers = {
-    oci.home = oci.home
-  }
+  # providers = {
+  #   oci.home = oci.home
+  # }
 }
 
 # Default IAM sub-module implementation for OKE cluster
@@ -113,9 +113,9 @@ module "iam" {
   autoscaler_compartments = local.autoscaler_compartments
   worker_compartments     = local.worker_compartments
 
-  providers = {
-    oci.home = oci.home
-  }
+  # providers = {
+  #   oci.home = oci.home
+  # }
 }
 
 output "availability_domains" {
