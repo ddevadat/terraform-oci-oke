@@ -3,7 +3,7 @@
 
 data "oci_identity_tag_namespaces" "oke" {
   count          = var.create_iam_resources ? 1 : 0
-  # provider       = oci.home
+  provider       = oci.home
   compartment_id = var.compartment_id
   filter {
     name   = "name"
@@ -50,7 +50,7 @@ locals {
 }
 
 resource "oci_identity_tag_namespace" "oke" {
-  # provider       = oci.home
+  provider       = oci.home
   count          = local.create_iam_tag_namespace ? 1 : 0
   compartment_id = var.compartment_id
   description    = "Tag namespace for OKE resources"

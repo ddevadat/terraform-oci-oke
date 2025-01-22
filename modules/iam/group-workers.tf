@@ -42,7 +42,7 @@ locals {
 }
 
 resource "oci_identity_dynamic_group" "workers" {
-  # provider       = oci.home
+  provider       = oci.home
   count          = var.create_iam_resources && var.create_iam_worker_policy ? 1 : 0
   compartment_id = var.tenancy_id # dynamic groups exist in root compartment (tenancy)
   description    = format("Dynamic group of self-managed worker nodes for OKE Terraform state %v", var.state_id)
