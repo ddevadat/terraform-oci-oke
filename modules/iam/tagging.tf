@@ -63,7 +63,7 @@ resource "oci_identity_tag_namespace" "oke" {
 }
 
 resource "oci_identity_tag" "oke" {
-  provider    = oci.home
+  # provider    = oci.home
   for_each    = local.create_iam_tag_namespace ? local.tags : {} #{ for k, v in oci_identity_tag_namespace.oke : k => local.tags } # local.create_iam_tag_namespace ? local.tags : {}
   description = each.value
   name        = each.key
