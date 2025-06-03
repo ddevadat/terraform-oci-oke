@@ -136,6 +136,28 @@ data "cloudinit_config" "workers" {
     }
   }
 
+  # OKE setup and initialization for Sidecar Proxy
+  dynamic "part" {
+    for_each = (!each.value.disable_default_cloud_init && each.value.worker_os_version == 8) ? [1] : []
+    content {
+      content_type = "text/cloud-config"
+      content = jsonencode({
+        # https://cloudinit.readthedocs.io/en/latest/reference/modules.html#apt-configure
+        runcmd = [
+          "modprobe br_netfilter",
+          "modprobe nf_nat",
+          "modprobe xt_REDIRECT",
+          "modprobe xt_owner",
+          "modprobe iptable_nat",
+          "modprobe iptable_mangle",
+          "modprobe iptable_filter"
+        ]
+      })
+      filename   = "50-oke-proxy.yml"
+      merge_type = local.default_cloud_init_merge_type
+    }
+  }
+
   lifecycle {
     precondition {
       condition = alltrue([for c in var.cloud_init :
