@@ -138,7 +138,7 @@ data "cloudinit_config" "workers" {
 
   # OKE setup and initialization for Sidecar Proxy
   dynamic "part" {
-    for_each = (!each.value.disable_default_cloud_init && each.value.worker_os_version == 8) ? [1] : []
+    for_each = (!each.value.disable_default_cloud_init && each.value.image_os == "Oracle Linux" && each.value.image_os_version == 8) ? [1] : []
     content {
       content_type = "text/cloud-config"
       content = jsonencode({
