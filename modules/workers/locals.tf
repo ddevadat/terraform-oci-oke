@@ -62,6 +62,7 @@ locals {
     size                         = var.worker_pool_size
     subnet_id                    = var.worker_subnet_id
     taints                       = [] # empty pool-specific default
+    kubelet_extra_args           = ""
     volume_kms_key_id            = var.volume_kms_key_id
   }
 
