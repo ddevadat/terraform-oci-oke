@@ -5,6 +5,7 @@
 set -o pipefail
 
 function run_oke_init() { # Initialize OKE worker node
+  source /etc/environment
   local kubelet_extra_args=${KUBELET_EXTRA_ARGS}
   if [[ -f /etc/systemd/system/oke-init.service ]]; then
     systemctl --no-block enable --now oke-init.service
