@@ -150,18 +150,6 @@ data "cloudinit_config" "workers" {
     }
   }
 
-  # dynamic "part" {
-  #   for_each = !each.value.disable_default_cloud_init && lookup(local.ubuntu_worker_pools, each.key, null) == null ? [1] : []
-  #   content {
-  #     content_type = "text/x-shellscript"
-  #     content = templatefile("${path.module}/cloudinit-oke.sh.tftpl", {
-  #       kubelet_extra_args = lookup(each.value, "kubelet_extra_args", "")
-  #     })
-  #     filename   = "50-oke.sh"
-  #     merge_type = local.default_cloud_init_merge_type
-  #   }
-  # }
-
 
   lifecycle {
     precondition {
