@@ -73,6 +73,27 @@ data "cloudinit_config" "workers" {
     }
   }
 
+  # To add kubelet extra args
+  dynamic "part" {
+    for_each = each.value.disable_default_cloud_init ? [] : [1]
+    content {
+      content_type = "text/cloud-config"
+      content = jsonencode({
+        write_files = [
+          {
+            path        = "/etc/environment"
+            owner       = "root:root"
+            permissions = "0644"
+            append      = true
+            content     = "KUBELET_EXTRA_ARGS=\"${each.value.kubelet_extra_args}\""
+          }
+        ]
+      })
+      filename   = "20-kubelet-env.yml"
+      merge_type = local.default_cloud_init_merge_type
+    }
+  }
+
   # Write extra OKE configuration to filesystem
   dynamic "part" {
     for_each = each.value.disable_default_cloud_init ? [] : [1]
@@ -126,27 +147,27 @@ data "cloudinit_config" "workers" {
   }
 
   # OKE startup initialization
-  # dynamic "part" {
-  #   for_each = !each.value.disable_default_cloud_init && lookup(local.ubuntu_worker_pools, each.key, null) == null ? [1] : []
-  #   content {
-  #     content_type = "text/x-shellscript"
-  #     content      = file("${path.module}/cloudinit-oke.sh")
-  #     filename     = "50-oke.sh"
-  #     merge_type   = local.default_cloud_init_merge_type
-  #   }
-  # }
-
   dynamic "part" {
     for_each = !each.value.disable_default_cloud_init && lookup(local.ubuntu_worker_pools, each.key, null) == null ? [1] : []
     content {
       content_type = "text/x-shellscript"
-      content = templatefile("${path.module}/cloudinit-oke.sh", {
-        kubelet_extra_args = lookup(each.value, "kubelet_extra_args", "")
-      })
-      filename   = "50-oke.sh"
-      merge_type = local.default_cloud_init_merge_type
+      content      = file("${path.module}/cloudinit-oke.sh")
+      filename     = "50-oke.sh"
+      merge_type   = local.default_cloud_init_merge_type
     }
   }
+
+  # dynamic "part" {
+  #   for_each = !each.value.disable_default_cloud_init && lookup(local.ubuntu_worker_pools, each.key, null) == null ? [1] : []
+  #   content {
+  #     content_type = "text/x-shellscript"
+  #     content = templatefile("${path.module}/cloudinit-oke.sh.tftpl", {
+  #       kubelet_extra_args = lookup(each.value, "kubelet_extra_args", "")
+  #     })
+  #     filename   = "50-oke.sh"
+  #     merge_type = local.default_cloud_init_merge_type
+  #   }
+  # }
 
 
   lifecycle {
