@@ -89,7 +89,7 @@ data "cloudinit_config" "workers" {
           }
         ]
       })
-      filename   = "20-kubelet-env.yml"
+      filename   = "10-kubelet-env.yml"
       merge_type = local.default_cloud_init_merge_type
     }
   }
