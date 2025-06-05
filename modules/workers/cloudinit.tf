@@ -77,19 +77,12 @@ data "cloudinit_config" "workers" {
   dynamic "part" {
     for_each = each.value.disable_default_cloud_init ? [] : [1]
     content {
-      content_type = "text/cloud-config"
-      content = jsonencode({
-        write_files = [
-          {
-            path        = "/etc/environment"
-            owner       = "root:root"
-            permissions = "0644"
-            append      = true
-            content     = "KUBELET_EXTRA_ARGS=\"${each.value.kubelet_extra_args}\""
-          }
-        ]
-      })
-      filename   = "10-kubelet-env.yml"
+      content_type = "text/x-shellscript"
+      content = <<-EOF
+        #!/bin/bash
+        echo 'KUBELET_EXTRA_ARGS="${each.value.kubelet_extra_args}"' >> /etc/environment
+      EOF
+      filename   = "10-kubelet-env.sh"
       merge_type = local.default_cloud_init_merge_type
     }
   }
