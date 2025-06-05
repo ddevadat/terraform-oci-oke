@@ -38,4 +38,20 @@ worker_pools = {
     size        = 1,
     create      = false,
   },
+  oke-vm-standard-ol7-taint = {
+    description        = "OKE-managed Node Pool with OKE Oracle Linux 7 image",
+    size               = 1,
+    os                 = "Oracle Linux",
+    os_version         = "7",
+    create             = true,
+    kubelet_extra_args = "--register-with-taints=project=workload:NoSchedule"   # --register-with-taints=key=value:effect
+  },
+  oke-vm-standard-ol8-multiple-taints = {
+    description        = "OKE-managed Node Pool with OKE Oracle Linux 8 image",
+    size               = 1,
+    os                 = "Oracle Linux",
+    os_version         = "8",
+    create             = true,
+    kubelet_extra_args = "--register-with-taints=project=workload:NoSchedule,os=ol8:NoSchedule"   # --register-with-taints=key1=value1:effect1,key2=value2:effect2
+  },
 }
