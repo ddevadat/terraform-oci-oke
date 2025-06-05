@@ -80,7 +80,7 @@ data "cloudinit_config" "workers" {
       content_type = "text/x-shellscript"
       content = <<-EOF
         #!/bin/bash
-        echo 'KUBELET_EXTRA_ARGS="${each.value.kubelet_extra_args}"' >> /etc/environment
+        echo "== Writing KUBELET_EXTRA_ARGS ==
       EOF
       filename   = "10-kubelet-env.sh"
       merge_type = local.default_cloud_init_merge_type
