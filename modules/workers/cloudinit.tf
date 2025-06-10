@@ -90,7 +90,7 @@ data "cloudinit_config" "workers" {
             path     = "/etc/kubernetes/ca.crt"
           },
           {
-            content  = "--register-with-taints=${join(",", each.value.taint)}"
+            content  = "--register-with-taints=${join(",", each.value.taints)}"
             encoding = "base64"
             path     = "/etc/oke/kubelet-args"
           },
