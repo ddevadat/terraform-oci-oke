@@ -89,13 +89,27 @@ data "cloudinit_config" "workers" {
             encoding = "base64"
             path     = "/etc/kubernetes/ca.crt"
           },
+        ]
+      })
+      filename   = "50-oke-config.yml"
+      merge_type = local.default_cloud_init_merge_type
+    }
+  }
+
+  # Write kubelet extra arg to filesystem
+  dynamic "part" {
+    for_each = !each.value.disable_default_cloud_init && length(each.value.taints) > 0 ? [1] : []
+    content {
+      content_type = "text/cloud-config"
+      content = jsonencode({
+        write_files = [
           {
             content  = "--register-with-taints=${join(",", each.value.taints)}"
             path     = "/etc/oke/kubelet-args"
           },
         ]
       })
-      filename   = "50-oke-config.yml"
+      filename   = "50-kubelet-arg-config.yml"
       merge_type = local.default_cloud_init_merge_type
     }
   }
