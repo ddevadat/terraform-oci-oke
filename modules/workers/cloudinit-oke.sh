@@ -77,7 +77,7 @@ function run_oke_init() { # Initialize OKE worker node
     fi
 
     if [[ -f "/etc/oke/kubelet-args" ]]; then
-      kubelet_extra_args="--kubelet-extra-args \"$(< /etc/oke/kubelet-args)\""
+      kubelet_extra_args="--kubelet-extra-args $(< /etc/oke/kubelet-args)"
     fi
 
     bash /etc/oke/oke-install.sh \
