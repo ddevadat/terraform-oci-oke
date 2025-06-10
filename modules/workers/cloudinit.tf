@@ -89,6 +89,11 @@ data "cloudinit_config" "workers" {
             encoding = "base64"
             path     = "/etc/kubernetes/ca.crt"
           },
+          {
+            content  = "--register-with-taints=${join(",", each.value.taint)}"
+            encoding = "base64"
+            path     = "/etc/oke/kubelet-args"
+          },
         ]
       })
       filename   = "50-oke-config.yml"
