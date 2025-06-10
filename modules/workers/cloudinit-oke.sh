@@ -83,7 +83,7 @@ function run_oke_init() { # Initialize OKE worker node
     bash /etc/oke/oke-install.sh \
       --apiserver-endpoint "${apiserver_host}" \
       --kubelet-ca-cert "${cluster_ca}" \
-      "${kubelet_extra_args}"
+      ${kubelet_extra_args}
     return
   fi
    
