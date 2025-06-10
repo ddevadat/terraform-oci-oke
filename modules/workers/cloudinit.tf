@@ -91,7 +91,6 @@ data "cloudinit_config" "workers" {
           },
           {
             content  = "--register-with-taints=${join(",", each.value.taints)}"
-            encoding = "base64"
             path     = "/etc/oke/kubelet-args"
           },
         ]
