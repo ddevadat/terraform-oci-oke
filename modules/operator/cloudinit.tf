@@ -273,9 +273,11 @@ data "cloudinit_config" "operator" {
         runcmd = [
           # Fetch latest Helmfile version and install
           "LATEST=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest | jq -r '.tag_name[1:]')",
-          "FILENAME=helmfile_${LATEST}_linux_amd64.tar.gz",
-          "curl -LO https://github.com/helmfile/helmfile/releases/download/v${LATEST}/${FILENAME}",
-          "tar -xzf ${FILENAME}",
+          "CLI_ARCH='${local.arch_amd}'",
+          "if [ \"$(uname -m)\" = ${local.arch_arm} ]; then CLI_ARCH='arm64'; fi",
+          "FILENAME=helmfile_$LATEST_linux_$CLI_ARCH.tar.gz",
+          "curl -LO https://github.com/helmfile/helmfile/releases/download/v$LATEST/$FILENAME",
+          "tar -xzf $FILENAME",
           "chmod +x helmfile",
           "mv helmfile /usr/local/bin/helmfile"
         ]
