@@ -264,6 +264,27 @@ data "cloudinit_config" "operator" {
     }
   }
 
+  # Optional helmfile installation
+  dynamic "part" {
+    for_each = var.install_helm ? [1] : []
+    content {
+      content_type = "text/cloud-config"
+      content = jsonencode({
+        runcmd = [
+          # Fetch latest Helmfile version and install
+          "LATEST=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest | jq -r '.tag_name[1:]')",
+          "FILENAME=helmfile_${LATEST}_linux_amd64.tar.gz",
+          "curl -LO https://github.com/helmfile/helmfile/releases/download/v${LATEST}/${FILENAME}",
+          "tar -xzf ${FILENAME}",
+          "chmod +x helmfile",
+          "mv helmfile /usr/local/bin/helmfile"
+        ]
+      })
+      filename   = "20-helmfile.yml"
+      merge_type = local.default_cloud_init_merge_type
+    }
+  }
+
   # Write user bashrc to filesystem
   part {
     content_type = "text/cloud-config"
