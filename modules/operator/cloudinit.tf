@@ -272,7 +272,7 @@ data "cloudinit_config" "operator" {
       content = jsonencode({
         runcmd = [
           # Install helm diff plugin
-          "helm plugin install https://github.com/databus23/helm-diff",
+          "/usr/bin/helm plugin install https://github.com/databus23/helm-diff",
           # Fetch latest Helmfile version and install
           "LATEST=1.1.2",
           # "LATEST=$(curl -s https://api.github.com/repos/helmfile/helmfile/releases/latest | jq -r '.tag_name[1:]')",
