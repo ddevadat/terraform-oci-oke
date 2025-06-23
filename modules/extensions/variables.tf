@@ -106,3 +106,9 @@ variable "gatekeeper_helm_values_files" { type = list(string) }
 # Service Account
 variable "create_service_account" { type = bool }
 variable "service_accounts" { type = map(any) }
+
+# Apps: Custom
+variable "custom_app_install" { type = bool }
+variable "custom_app_reapply" { type = bool }
+variable "custom_app_helmfile_values" { type = any }
+variable "custom_app_helmfile_values_files" { type = list(string) }

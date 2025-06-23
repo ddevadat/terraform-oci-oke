@@ -122,4 +122,10 @@ module "extensions" {
   # Service Account
   create_service_account = var.create_service_account
   service_accounts       = var.service_accounts
+
+  # Apps: Custom
+  custom_app_install               = var.custom_app_install
+  custom_app_reapply               = var.custom_app_reapply
+  custom_app_helmfile_values       = var.custom_app_helmfile_values
+  custom_app_helmfile_values_files = var.custom_app_helmfile_values_files
 }

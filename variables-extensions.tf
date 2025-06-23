@@ -387,3 +387,30 @@ variable "service_accounts" {
   description = "Map of service accounts and associated parameters."
   type        = map(any)
 }
+
+
+# Apps: Custom
+
+variable "custom_app_install" {
+  default     = false
+  description = "Whether to deploy the Custom Application via helmfile."
+  type        = bool
+}
+
+variable "custom_app_reapply" {
+  default     = false
+  description = "Whether to force reapply of the chart when no changes are detected, e.g. with state modified externally."
+  type        = bool
+}
+
+variable "custom_app_helmfile_values" {
+  default     = {}
+  description = "Map of custom apps helmfile."
+  type        = any
+}
+
+variable "custom_app_helmfile_values_files" {
+  default     = []
+  description = "Paths to a local YAML files with helmfile values."
+  type        = list(string)
+}
