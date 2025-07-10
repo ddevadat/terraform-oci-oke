@@ -83,11 +83,11 @@ locals {
     fss      = { create = contains(keys(var.subnets), "fss") }
     int_lb = {
       create         = var.create_cluster && contains(["both", "internal"], var.load_balancers),
-      create_seclist = true, dns_label = "ilb",
+      create_seclist = false, dns_label = "ilb",
     }
     pub_lb = {
       create         = var.create_cluster && contains(["both", "public"], var.load_balancers),
-      create_seclist = true, is_public = true, dns_label = "plb",
+      create_seclist = false, is_public = true, dns_label = "plb",
     }
   }
 
