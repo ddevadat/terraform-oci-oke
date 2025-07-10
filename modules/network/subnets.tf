@@ -215,25 +215,25 @@ resource "oci_core_subnet" "oke" {
 
 # Create an associated security list for subnets when enabled
 # e.g. for load balancers to prevent CCM management of default security list
-resource "oci_core_security_list" "oke" {
-  for_each = {
-    for k, v in local.subnets_to_create : k => v
-    if tobool(lookup(v, "create_seclist", false))
-  }
+# resource "oci_core_security_list" "oke" {
+#   for_each = {
+#     for k, v in local.subnets_to_create : k => v
+#     if tobool(lookup(v, "create_seclist", false))
+#   }
 
-  compartment_id = var.compartment_id
-  display_name   = format("%v-%v", each.key, var.state_id)
-  vcn_id         = var.vcn_id
-  defined_tags   = var.defined_tags
-  freeform_tags  = var.freeform_tags
+#   compartment_id = var.compartment_id
+#   display_name   = format("%v-%v", each.key, var.state_id)
+#   vcn_id         = var.vcn_id
+#   defined_tags   = var.defined_tags
+#   freeform_tags  = var.freeform_tags
 
-  lifecycle {
-    ignore_changes = [
-      freeform_tags, defined_tags, display_name, vcn_id,
-      ingress_security_rules, egress_security_rules, # ignore for CCM-management
-    ]
-  }
-}
+#   lifecycle {
+#     ignore_changes = [
+#       freeform_tags, defined_tags, display_name, vcn_id,
+#       ingress_security_rules, egress_security_rules, # ignore for CCM-management
+#     ]
+#   }
+# }
 
 # Return configured/created subnet IDs and CIDRs when applicable
 output "bastion_subnet_id" {
