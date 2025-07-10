@@ -83,11 +83,11 @@ locals {
     fss      = { create = contains(keys(var.subnets), "fss") }
     int_lb = {
       create         = var.create_cluster && contains(["both", "internal"], var.load_balancers),
-      create_seclist = false, dns_label = "ilb",
+      create_seclist = true, dns_label = "ilb",
     }
     pub_lb = {
       create         = var.create_cluster && contains(["both", "public"], var.load_balancers),
-      create_seclist = false, is_public = true, dns_label = "plb",
+      create_seclist = true, is_public = true, dns_label = "plb",
     }
   }
 
@@ -215,11 +215,21 @@ resource "oci_core_subnet" "oke" {
 
 # Create an associated security list for subnets when enabled
 # e.g. for load balancers to prevent CCM management of default security list
-resource "oci_core_security_list" "oke" {
-  for_each = {
-    for k, v in local.subnets_to_create : k => v
-    if tobool(lookup(v, "create_seclist", false))
+
+locals {
+  subnets_to_create_with_seclist = {
+    for k, v in local.subnets_to_create :
+    k => v if tobool(lookup(v, "create_seclist", false))
   }
+}
+
+resource "oci_core_security_list" "oke" {
+  # for_each = {
+  #   for k, v in local.subnets_to_create : k => v
+  #   if tobool(lookup(v, "create_seclist", false))
+  # }
+
+  for_each = local.subnets_to_create_with_seclist
 
   compartment_id = var.compartment_id
   display_name   = format("%v-%v", each.key, var.state_id)
